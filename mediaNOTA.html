@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Verificar média</title>
+</head>
+<body>
+
+<button onclick="verificarMedia()">Verificar média</button>
+
+<script>
+function verificarMedia() {
+  let media = Number(prompt("Digite a média do aluno:"));
+
+  if (media >= 6) {
+    alert(`Aprovado`);
+  } else if (media >= 2 && media < 6) {
+    alert(`Prova de recuperação`);
+  } else {
+    alert(`Reprovado`);
+  }
+}
+</script>
+
+</body>
+</html>
