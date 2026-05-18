@@ -1,26 +1,155 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
+
 <head>
-  <meta charset="UTF-8">
-  <title>Verificar média</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Alunos</title>
+
+    <link rel="stylesheet" href="./css/style.css">
 </head>
+
 <body>
 
-<button onclick="verificarMedia()">Verificar média</button>
+    <h1>Cadastro de Alunos</h1>
 
-<script>
-function verificarMedia() {
-  let media = Number(prompt("Digite a média do aluno:"));
+    <form id="formAluno">
 
-  if (media >= 6) {
-    alert(`Aprovado`);
-  } else if (media >= 2 && media < 6) {
-    alert(`Prova de recuperação`);
-  } else {
-    alert(`Reprovado`);
-  }
-}
-</script>
+        <input 
+            type="text" 
+            id="nome" 
+            placeholder="Nome do Aluno" 
+            required
+        >
+
+        <input 
+            type="number" 
+            id="nota1" 
+            placeholder="Nota 1"
+            min="0"
+            max="10"
+            step="0.1"
+            required
+        >
+
+        <input 
+            type="number" 
+            id="nota2" 
+            placeholder="Nota 2"
+            min="0"
+            max="10"
+            step="0.1"
+            required
+        >
+
+        <button type="submit">
+            Adicionar Aluno
+        </button>
+
+    </form>
+
+    <table border="1">
+
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>Nota 1</th>
+                <th>Nota 2</th>
+                <th>Média</th>
+                <th>Situação</th>
+            </tr>
+        </thead>
+
+        <tbody id="tabelaAlunos">
+
+        </tbody>
+
+    </table>
+
+    <script>
+
+        const form = document.getElementById('formAluno');
+        const tabela = document.getElementById('tabelaAlunos');
+
+        let alunos = JSON.parse(localStorage.getItem('alunos')) || [];
+
+        mostrarAlunos();
+
+        form.addEventListener('submit', function(event) {
+
+            event.preventDefault();
+
+            const nome = document.getElementById('nome').value;
+
+            const nota1 = Number(document.getElementById('nota1').value);
+
+            const nota2 = Number(document.getElementById('nota2').value);
+
+      
+            if (nota1 < 0 || nota1 > 10 || nota2 < 0 || nota2 > 10) {
+
+                alert('As notas devem estar entre 0 e 10.');
+
+                return;
+            }
+            const media = (nota1 + nota2) /2
+          
+            let situacao = '';
+
+            if (media >= 6) {
+
+                situacao = 'Aprovado';
+
+            } else if (media >= 2 && media < 6) {
+
+                situacao = 'Recuperação';
+
+            } else {
+
+                situacao = 'Reprovado';
+            }
+
+     
+            const aluno = {
+
+                nome,
+                nota1,
+                nota2,
+                media: media.toFixed(2),
+                situacao
+            };
+
+            alunos.push(aluno);
+
+            localStorage.setItem('alunos', JSON.stringify(alunos));
+
+           
+            mostrarAlunos();
+
+      
+            form.reset();
+        });
+
+        function mostrarAlunos() {
+
+            tabela.innerHTML = '';
+
+            alunos.forEach(aluno => {
+
+                tabela.innerHTML += `
+                    <tr>
+                        <td>${aluno.nome}</td>
+                        <td>${aluno.nota1}</td>
+                        <td>${aluno.nota2}</td>
+                        <td>${aluno.media}</td>
+                        <td>${aluno.situacao}</td>
+                    </tr>
+                `;
+            });
+        }
+
+    </script>
 
 </body>
+
 </html>
